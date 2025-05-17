@@ -33,6 +33,7 @@ router.patch(
     USER_ROLE.sub_admin,
     USER_ROLE.super_admin,
     USER_ROLE.user,
+    USER_ROLE.organizer,
   ),
   upload.single('profile'),
   parseData(),
@@ -46,6 +47,7 @@ router.delete(
     USER_ROLE.sub_admin,
     USER_ROLE.super_admin,
     USER_ROLE.user,
+    USER_ROLE.organizer,
   ),
   userController.deleteMYAccount,
 );
@@ -62,11 +64,12 @@ router.get(
     USER_ROLE.sub_admin,
     USER_ROLE.super_admin,
     USER_ROLE.user,
+    USER_ROLE.organizer,
   ),
   userController.getMyProfile,
 );
 
-router.get('/:id', userController.getUserById);
+router.get('/:id', auth(USER_ROLE.admin), userController.getUserById);
 
 router.get('/', auth(USER_ROLE.admin), userController.getAllUser);
 

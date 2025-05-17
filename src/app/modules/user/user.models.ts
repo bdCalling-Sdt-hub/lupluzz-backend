@@ -2,7 +2,7 @@ import { Error, Query, Schema, model } from 'mongoose';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import { IUser, UserModel } from './user.interface';
-import { Role, USER_ROLE } from './user.constants';
+import { Login_With, Role, USER_ROLE } from './user.constants';
 
 const userSchema: Schema<IUser> = new Schema(
   {
@@ -24,10 +24,16 @@ const userSchema: Schema<IUser> = new Schema(
       trim: true,
       unique: true,
     },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
 
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
       default: null,
     },
 
@@ -46,10 +52,10 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       default: null,
     },
-    
-    isGoogleLogin: {
-      type: Boolean,
-      default: false,
+    loginWth: {
+      type: String,
+      enum: Login_With,
+      default: Login_With.credentials,
     },
     profile: {
       type: String,
@@ -88,6 +94,24 @@ const userSchema: Schema<IUser> = new Schema(
         default: false,
       },
     },
+
+    device: {
+      ip: {
+        type: String,
+      },
+      browser: {
+        type: String,
+      },
+      os: {
+        type: String,
+      },
+      device: {
+        type: String,
+      },
+      lastLogin: {
+        type: String,
+      },
+    },
   },
   {
     timestamps: true,
@@ -97,7 +121,7 @@ const userSchema: Schema<IUser> = new Schema(
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
-  if (!user?.isGoogleLogin) {
+  if (user?.loginWth === Login_With.credentials) {
     user.password = await bcrypt.hash(
       user.password,
       Number(config.bcrypt_salt_rounds),
@@ -115,7 +139,6 @@ userSchema.post(
     next();
   },
 );
- 
 
 userSchema.statics.isUserExist = async function (email: string) {
   return await User.findOne({ email: email }).select('+password');
@@ -124,6 +147,7 @@ userSchema.statics.isUserExist = async function (email: string) {
 userSchema.statics.IsUserExistId = async function (id: string) {
   return await User.findById(id).select('+password');
 };
+
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
   hashedPassword,

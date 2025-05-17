@@ -7,7 +7,7 @@ import config from '../../config';
 
 // login
 const login = catchAsync(async (req: Request, res: Response) => {
-  const result = await authServices.login(req.body);
+  const result = await authServices.login(req.body, req);
   const { refreshToken } = result;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cookieOptions: any = {
