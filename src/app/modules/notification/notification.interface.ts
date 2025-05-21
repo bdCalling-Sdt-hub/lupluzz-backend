@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 export enum modeType {
-  RefundRequest = 'refundRequest',
+  AddRequests = 'AddRequests',
   ShopWiseOrder = 'ShopWiseOrder',
   Order = 'Order',
 }

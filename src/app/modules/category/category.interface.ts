@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 export interface ICategory {
   _id: string;
   name: string;
+  type: string;
   banner: string;
   isDeleted: boolean;
 }

@@ -4,6 +4,17 @@ import { ICategory, ICategoryModel } from './category.interface';
 const categorySchema = new Schema<ICategory>(
   {
     name: { type: 'string', required: true, unique: true },
+    type: {
+      type: 'string',
+      required: true,
+      enum: [
+        'TypeOfEvent',
+        'TypeOfSupplier',
+        'Job',
+        'ExtraServices',
+        'inspiration',
+      ],
+    },
     banner: { type: 'string', required: false },
     isDeleted: { type: 'boolean', default: false },
   },
