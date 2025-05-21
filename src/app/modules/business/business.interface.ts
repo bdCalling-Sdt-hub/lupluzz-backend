@@ -1,4 +1,5 @@
 import { Model, ObjectId } from 'mongoose';
+import { ICategory } from '../category/category.interface';
 
 export interface IGallery {
   url: string;
@@ -11,9 +12,15 @@ export interface ISocialLinks {
   tiktok: string;
 }
 
-export interface IFsq {
+export interface IFaq {
   question: string;
   answer: string;
+}
+
+export interface IAvailabilities {
+  day: string[];
+  startTime: string;
+  endTime: string;
 }
 
 export interface IBusiness {
@@ -30,10 +37,11 @@ export interface IBusiness {
   coverColor: string;
   promotionImage: IGallery[];
   gallery: IGallery[];
-  fsq: IFsq[];
-  providerType: string;
-  eventType: string[];
-  additionalServices: string[];
+  faq: IFaq[];
+  providerType: ObjectId;
+  eventType: ObjectId[] | ICategory[];
+  additionalServices: ObjectId[] | ICategory[];
+  availabilities: IAvailabilities;
   priceRange: string;
   maxGuest: number;
   address: string;
@@ -41,6 +49,7 @@ export interface IBusiness {
     type: string;
     coordinates: number[];
   };
+  isDeleted: boolean;
 }
 
 export type IBusinessModules = Model<IBusiness, Record<string, unknown>>;

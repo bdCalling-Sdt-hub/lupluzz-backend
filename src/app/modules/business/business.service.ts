@@ -1,9 +1,8 @@
-
 import httpStatus from 'http-status';
 import { IBusiness } from './business.interface';
 import Business from './business.models';
-import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/AppError';
+import QueryBuilder from '../../class/builder/QueryBuilder';
 
 const createBusiness = async (payload: IBusiness) => {
   const result = await Business.create(payload);
@@ -14,9 +13,9 @@ const createBusiness = async (payload: IBusiness) => {
 };
 
 const getAllBusiness = async (query: Record<string, any>) => {
-query["isDeleted"] = false;
+  query['isDeleted'] = false;
   const businessModel = new QueryBuilder(Business.find(), query)
-    .search([])
+    .search(['name', 'email', 'phoneNumber', 'address', 'priceRange'])
     .filter()
     .paginate()
     .sort()
@@ -33,7 +32,7 @@ query["isDeleted"] = false;
 
 const getBusinessById = async (id: string) => {
   const result = await Business.findById(id);
-  if (!result && result?.isDeleted) {
+  if (!result || result?.isDeleted) {
     throw new Error('Business not found!');
   }
   return result;
@@ -51,7 +50,7 @@ const deleteBusiness = async (id: string) => {
   const result = await Business.findByIdAndUpdate(
     id,
     { isDeleted: true },
-    { new: true }
+    { new: true },
   );
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete business');

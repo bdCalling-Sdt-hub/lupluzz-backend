@@ -26,23 +26,6 @@ const addRequestsSchema = new Schema<IAddRequests>(
   },
 );
 
-//addRequestsSchema.pre('find', function (next) {
-//  //@ts-ignore
-//  this.find({ isDeleted: { $ne: true } });
-//  next();
-//});
-
-//addRequestsSchema.pre('findOne', function (next) {
-//@ts-ignore
-//this.find({ isDeleted: { $ne: true } });
-// next();
-//});
-
-addRequestsSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-  next();
-});
-
 const AddRequests = model<IAddRequests, IAddRequestsModules>(
   'AddRequests',
   addRequestsSchema,

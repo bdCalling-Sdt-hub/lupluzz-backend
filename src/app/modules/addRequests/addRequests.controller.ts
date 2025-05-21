@@ -23,6 +23,7 @@ const getAllAddRequests = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const getMyAddRequests = catchAsync(async (req: Request, res: Response) => {
   req.query['user'] = req.user.userId;
   const result = await addRequestsService.getAllAddRequests(req.query);
@@ -43,6 +44,7 @@ const getAddRequestsById = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const updateAddRequests = catchAsync(async (req: Request, res: Response) => {
   const result = await addRequestsService.updateAddRequests(
     req.params.id,
@@ -55,6 +57,7 @@ const updateAddRequests = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const rejectAddRequests = catchAsync(async (req: Request, res: Response) => {
   const result = await addRequestsService.rejectAddRequests(req.params.id);
   sendResponse(res, {
@@ -64,6 +67,7 @@ const rejectAddRequests = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const approvedAddRequests = catchAsync(async (req: Request, res: Response) => {
   const result = await addRequestsService.approvedAddRequests(req.params.id);
   sendResponse(res, {
